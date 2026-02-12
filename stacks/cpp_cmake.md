@@ -1,20 +1,20 @@
 ---
 name: stack-cpp-cmake
-description: C++ 开发技术栈标准。使用 CMake + Conan + Ninja 构建工作流，集成 Clang-Tidy (静态分析)、Clang-Format (格式化) 和 GTest (测试)。
+description: C/C++ 开发技术栈标准。使用 CMake + Ninja 构建工作流，可选 Conan 包管理，集成 Clang-Tidy (静态分析)、Clang-Format (格式化) 和 GTest (测试)。
 version: 1.0.0
-tags: [cpp, cmake, conan, ninja, gtest, clang-tidy]
+tags: [c, cpp, cmake, conan, ninja, gtest, clang-tidy]
 ---
 
-# C++ 开发技术栈规范
+# C/C++ 开发技术栈规范
 
-本文档定义了 Vibe Coding 体系下 C++ 项目的强制性技术栈和开发标准。核心理念是现代 C++ (C++17/20)、可复现构建和严格的静态分析。
+本文档定义了 Vibe Coding 体系下 C/C++ 项目的强制性技术栈和开发标准。适用于纯 C、纯 C++ 以及 C/C++ 混合项目。核心理念是现代 C++ (C++17/20)、可复现构建和严格的静态分析。
 
 ## 工具链标准
 
 Agent 必须使用以下工具，除非用户明确指定其他替代方案：
 
 - **构建系统**: `CMake` (>= 3.15) + `Ninja`
-- **包管理器**: `Conan` (>= 2.0)
+- **包管理器**: `Conan` (>= 2.0) *(可选，当项目根目录存在 `conanfile.txt` 或 `conanfile.py` 时启用)*
 - **静态分析**: `Clang-Tidy`
 - **代码格式化**: `Clang-Format`
 - **测试框架**: `Google Test` (GTest)
@@ -34,7 +34,8 @@ Agent 必须使用以下工具，除非用户明确指定其他替代方案：
     - `test_main.cpp`
   - `CMakeLists.txt` (顶层构建配置)
   - `CMakePresets.json` (构建预设)
-  - `conanfile.txt` 或 `conanfile.py` (依赖描述)
+  - `conanfile.txt` 或 `conanfile.py` *(可选，Conan 依赖描述)*
+  - `.conan/` *(Conan 生成目录，由 `conan install` 自动创建，包含 `*-config.cmake`)*
   - `.clang-tidy` (静态分析配置)
   - `.clang-format` (格式化配置)
   - `.gitignore`
@@ -68,7 +69,8 @@ Agent 必须使用以下工具，除非用户明确指定其他替代方案：
 # 1. 创建构建目录
 mkdir -p <build_directory>
 
-# 2. 安装 Conan 依赖
+# 2. [仅当存在 conanfile.txt/conanfile.py 时] 安装 Conan 依赖
+#    必须在 cmake configure 之前执行，否则 find_package() 会失败
 conan install . --output-folder=<build_directory> --build=missing --settings=build_type=<BUILD_TYPE> -r conancenter
 
 # 3. 配置 CMake
@@ -78,7 +80,9 @@ cmake --preset <preset_name>
 cmake --build --preset <preset_name>
 ```
 
-### Conan 参数说明
+> **关键**：Conan 步骤**必须**在 CMake configure 之前执行。`conan install` 会在 <build_directory> 目录下生成 `*-config.cmake` 文件，CMake 的 `find_package()` 依赖这些文件来定位第三方库。
+
+### Conan 参数说明 (仅当项目使用 Conan 时适用)
 
 - `--output-folder`：指定依赖输出目录
 - `--build=missing`：本地构建缺失的包
@@ -89,8 +93,8 @@ cmake --build --preset <preset_name>
 
 Agent 必须使用以下命令执行开发任务：
 
-- **安装依赖**：
-  - `conan install . --output-folder=.build --build=missing`
+- **安装依赖** *(仅 Conan 项目)*：
+  - `conan install . --output-folder=<build_directory> --build=missing`
 - **配置项目**：
   - `cmake --preset <preset_name>`
 - **构建项目**：

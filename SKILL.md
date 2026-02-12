@@ -26,16 +26,38 @@ license: Apache-2.0
 
 你**不应该**依靠猜测来工作。在接收到任务后的第一步，你**必须**根据以下逻辑读取 `.vibe-skills/` 目录下的具体手册。
 
+### 零步：项目文件自动检测 (Auto-Detect)
+
+在分析用户的 Prompt 之前，首先扫描项目根目录 (workspace 根目录) 下的特征文件，自动确定技术栈。
+
+**检测规则（按优先级从高到低）：**
+
+| 优先级 | 检测到的文件 | 确定的技术栈 | 必须读取的文件 |
+| :---: | :--- | :--- | :--- |
+| 1 | `conanfile.txt` 或 `conanfile.py` | **C/C++ (Conan + CMake)** | `.vibe-skills/stacks/cpp_cmake.md` |
+| 2 | `CMakeLists.txt` | **C/C++ (CMake)** | `.vibe-skills/stacks/cpp_cmake.md` |
+| 3 | `pyproject.toml` 或 `setup.py` | **Python** | `.vibe-skills/stacks/python_uv.md` |
+| 4 | `package.json` 或 `bun.lockb` | **TypeScript/Web** | `.vibe-skills/stacks/ts_bun.md` |
+| - | *(无匹配)* | 跳过，进入第一步意图识别 | - |
+
+**重要说明：**
+
+- **Conan 优先于 CMake**：当 `conanfile.txt`/`conanfile.py` 与 `CMakeLists.txt` 同时存在时，构建流程必须先执行 `conan install`（生成 `*-config.cmake` 到 build 目录），再执行 `cmake --preset`，否则 `find_package()` 会失败。
+- **C/C++ 混合项目**：CMake 天然支持 C 和 C++ 混合编译，无需区分纯 C 或纯 C++ 项目，统一使用 `cpp_cmake.md` 规范。
+- **空项目/新项目**：如果根目录没有任何特征文件，则跳过此步，由第一步的意图识别和用户 Prompt 来决定技术栈。
+
 ### 第一步：意图识别与技能加载
 
-分析用户的 Prompt，确定以下两个维度，并**读取**对应的 Markdown 文件内容作为当前上下文：
+如果零步已确定技术栈，则此步仅需确定**开发阶段**。如果零步未命中，则同时确定技术栈和开发阶段。
+
+分析用户的 Prompt，并**读取**对应的 Markdown 文件内容作为当前上下文：
 
 #### 确定技术栈 (Tech Stack)
 
 | 识别到的语言 | **必须读取的文件** | 核心工具链 (关键词) |
 | :--- | :--- | :--- |
 | **Python** | `.vibe-skills/stacks/python_uv.md` | `uv`, `ruff`, `mypy`, `pytest` |
-| **C++** | `.vibe-skills/stacks/cpp_cmake.md` | `CMake`, `Ninja`, `Clang-Tidy`, `GTest` |
+| **C/C++** | `.vibe-skills/stacks/cpp_cmake.md` | `CMake`, `Conan`, `Ninja`, `Clang-Tidy`, `GTest` |
 | **TypeScript/Web** | `.vibe-skills/stacks/ts_bun.md` | `Bun`, `Biome`, `Vitest` |
 | *(通用/未知)* | `.vibe-skills/core/general.md` | SOLID, Clean Code |
 
@@ -96,5 +118,5 @@ license: Apache-2.0
 │   └── 05_delivery.md      # CI/CD 与交付
 └── stacks/                 # [兵器] 语言与工具链适配
     ├── python_uv.md        # Python (uv stack)
-    ├── cpp_cmake.md        # C++ (cmake stack)
+    ├── cpp_cmake.md        # C/C++ (CMake + Conan stack)
     └── ts_bun.md           # TypeScript (bun stack)
