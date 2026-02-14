@@ -12,7 +12,7 @@ Vibe Coding Skills 是一组结构化的 Markdown 文档，用于指导 AI 编�
 
 - **TDD (测试驱动开发)**：先写测试，再写实现
 - **Clean Architecture**：模块化、低耦合、SOLID 原则
-- **现代化工具链**：每种语言使用最快、最现代的工具（如 Python 用 `uv` + `ruff`，C++ 用 `CMake` + `Ninja`）
+- **现代化工具链**：每种语言使用最快、最现代的工具（如 Python 用 `uv` + `ruff`，C++ 用 `CMake` + `Ninja`，Java 用 `Gradle` + `Spring Boot`，Flutter 用 `Riverpod` + `Freezed`，Vue 用 `Vite` + `Pinia`）
 - **标准化流程**：从需求分析到 CI/CD 交付的完整工作流
 
 ## 目录结构
@@ -33,7 +33,10 @@ Vibe Coding Skills 是一组结构化的 Markdown 文档，用于指导 AI 编�
 │   └── 05_delivery.md      #   CI/CD 与交付
 └── stacks/                 # 语言与工具链适配
     ├── python_uv.md        #   Python (uv + ruff + mypy + pytest)
-    └── cpp_cmake.md        #   C++ (CMake + Conan + Ninja + GTest)
+    ├── cpp_cmake.md        #   C++ (CMake + Conan + Ninja + GTest)
+    ├── java_springboot.md  #   Java (Spring Boot + Spring Cloud + Gradle + JUnit 5)
+    ├── dart_flutter.md     #   Dart/Flutter (Flutter + Riverpod + GoRouter + Freezed)
+    └── ts_vue.md           #   TypeScript/Vue (Vite + Vue 3 + Pinia + Vitest)
 ```
 
 ## 快速开始

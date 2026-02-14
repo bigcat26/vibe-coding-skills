@@ -37,13 +37,19 @@ license: Apache-2.0
 | 1 | `conanfile.txt` 或 `conanfile.py` | **C/C++ (Conan + CMake)** | `.vibe-skills/stacks/cpp_cmake.md` |
 | 2 | `CMakeLists.txt` | **C/C++ (CMake)** | `.vibe-skills/stacks/cpp_cmake.md` |
 | 3 | `pyproject.toml` 或 `setup.py` | **Python** | `.vibe-skills/stacks/python_uv.md` |
-| 4 | `package.json` 或 `bun.lockb` | **TypeScript/Web** | `.vibe-skills/stacks/ts_bun.md` |
+| 4 | `build.gradle.kts` 或 `pom.xml` | **Java (Spring Boot)** | `.vibe-skills/stacks/java_springboot.md` |
+| 5 | `pubspec.yaml` | **Dart/Flutter** | `.vibe-skills/stacks/dart_flutter.md` |
+| 6 | `package.json` + `vite.config.ts` + `*.vue` | **TypeScript/Vue** | `.vibe-skills/stacks/ts_vue.md` |
+| 7 | `package.json` 或 `bun.lockb` | **TypeScript/Web** | `.vibe-skills/stacks/ts_bun.md` |
 | - | *(无匹配)* | 跳过，进入第一步意图识别 | - |
 
 **重要说明：**
 
 - **Conan 优先于 CMake**：当 `conanfile.txt`/`conanfile.py` 与 `CMakeLists.txt` 同时存在时，构建流程必须先执行 `conan install`（生成 `*-config.cmake` 到 build 目录），再执行 `cmake --preset`，否则 `find_package()` 会失败。
 - **C/C++ 混合项目**：CMake 天然支持 C 和 C++ 混合编译，无需区分纯 C 或纯 C++ 项目，统一使用 `cpp_cmake.md` 规范。
+- **Vue 优先于通用 Web**：当 `package.json` 与 `vite.config.ts` 和 `.vue` 文件同时存在时，优先匹配 `ts_vue.md`（Vue 前端项目），而非 `ts_bun.md`（通用 TypeScript/Web 项目）。
+- **Java 项目识别**：`build.gradle.kts` (Gradle Kotlin DSL) 或 `pom.xml` (Maven) 均识别为 Java/Spring Boot 项目。优先推荐 Gradle。
+- **Flutter 项目识别**：`pubspec.yaml` 是 Dart/Flutter 项目的唯一特征文件。
 - **空项目/新项目**：如果根目录没有任何特征文件，则跳过此步，由第一步的意图识别和用户 Prompt 来决定技术栈。
 
 ### 第一步：意图识别与技能加载
@@ -58,6 +64,9 @@ license: Apache-2.0
 | :--- | :--- | :--- |
 | **Python** | `.vibe-skills/stacks/python_uv.md` | `uv`, `ruff`, `mypy`, `pytest` |
 | **C/C++** | `.vibe-skills/stacks/cpp_cmake.md` | `CMake`, `Conan`, `Ninja`, `Clang-Tidy`, `GTest` |
+| **Java/Spring Boot** | `.vibe-skills/stacks/java_springboot.md` | `Gradle`, `Spring Boot`, `Spring Cloud`, `JUnit 5`, `MyBatis-Plus` |
+| **Dart/Flutter** | `.vibe-skills/stacks/dart_flutter.md` | `Flutter`, `Riverpod`, `GoRouter`, `Freezed`, `Vitest` |
+| **TypeScript/Vue** | `.vibe-skills/stacks/ts_vue.md` | `Vite`, `Vue 3`, `Pinia`, `Vitest`, `pnpm` |
 | **TypeScript/Web** | `.vibe-skills/stacks/ts_bun.md` | `Bun`, `Biome`, `Vitest` |
 | *(通用/未知)* | `.vibe-skills/core/general.md` | SOLID, Clean Code |
 
@@ -119,4 +128,7 @@ license: Apache-2.0
 └── stacks/                 # [兵器] 语言与工具链适配
     ├── python_uv.md        # Python (uv stack)
     ├── cpp_cmake.md        # C/C++ (CMake + Conan stack)
+    ├── java_springboot.md  # Java (Spring Boot + Spring Cloud stack)
+    ├── dart_flutter.md     # Dart/Flutter (Flutter + Riverpod stack)
+    ├── ts_vue.md           # TypeScript/Vue (Vite + Vue 3 + Pinia stack)
     └── ts_bun.md           # TypeScript (bun stack)
