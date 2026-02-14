@@ -3,7 +3,7 @@ name: vibe-coding-master
 description: Vibe Coding 核心主控技能。专为追求极致心流(Flow)、现代化工程标准和零技术债务的软件开发而设计。包含全生命周期指导：项目初始化、架构设计、TDD(测试驱动开发)、重构及多语言现代化工具栈的自动适配。
 version: 1.0.0
 author: bigcat26 <https://github.com/bigcat26>
-license: Apache-2.0
+license: MIT
 ---
 
 # Vibe Coding Master Skill
