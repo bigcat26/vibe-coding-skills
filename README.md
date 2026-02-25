@@ -47,7 +47,7 @@ Vibe Coding Skills 是一组结构化的 Markdown 文档，用于指导 AI 编�
 
 ```bash
 # 在你的项目根目录下
-git clone https://github.com/bigcat26/vibe-coding-skills.git .windsurf/skills/vibe-coding
+git clone https://github.com/bigcat26/vibe-coding-master.git .windsurf/skills/vibe-coding-master
 ```
 
 Windsurf Cascade 会自动识别并加载 `SKILL.md` 作为技能指令。
